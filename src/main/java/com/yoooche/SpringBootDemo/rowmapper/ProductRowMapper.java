@@ -1,5 +1,6 @@
 package com.yoooche.SpringBootDemo.rowmapper;
 
+import com.yoooche.SpringBootDemo.constant.ProductCategory;
 import com.yoooche.SpringBootDemo.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,7 +15,11 @@ public class ProductRowMapper implements RowMapper<Product> {
 
         product.setProductId(resultSet.getInt("product_id"));
         product.setProductName(resultSet.getString("product_name"));
-        product.setCategory(resultSet.getString("category"));
+
+        String str = resultSet.getString("category");
+        ProductCategory productCategory = ProductCategory.valueOf(str);
+        product.setCategory(productCategory);
+
         product.setImageUrl(resultSet.getString("image_url"));
         product.setPrice(resultSet.getInt("price"));
         product.setStock(resultSet.getInt("stock"));
