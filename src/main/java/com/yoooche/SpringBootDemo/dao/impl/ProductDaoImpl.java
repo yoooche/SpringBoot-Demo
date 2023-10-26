@@ -1,6 +1,5 @@
 package com.yoooche.SpringBootDemo.dao.impl;
 
-import com.yoooche.SpringBootDemo.constant.ProductCategory;
 import com.yoooche.SpringBootDemo.dao.ProductDao;
 import com.yoooche.SpringBootDemo.dto.ProductQueryParams;
 import com.yoooche.SpringBootDemo.dto.ProductRequest;
@@ -30,16 +29,8 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "SELECT COUNT(*) FROM product WHERE 1=1";
         Map<String, Object> map = new HashMap<>();
 
-
         // 查詢 filtering & search
-        if (productQueryParams.getProductCategory() != null){
-            sql = sql + " AND category = :productCategory";
-            map.put("productCategory", productQueryParams.getProductCategory().name());
-        }
-        if (productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + productQueryParams.getSearch() + "%");
-        }
+        sql = addFilteringSql(sql, map, productQueryParams);
 
         return namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
     }
@@ -51,14 +42,8 @@ public class ProductDaoImpl implements ProductDao {
 
 
         // 查詢 filtering & search
-        if (productQueryParams.getProductCategory() != null){
-            sql = sql + " AND category = :productCategory";
-            map.put("productCategory", productQueryParams.getProductCategory().name());
-        }
-        if (productQueryParams.getSearch() != null){
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + productQueryParams.getSearch() + "%");
-        }
+        sql = addFilteringSql(sql, map, productQueryParams);
+
         // 排序 sorting
         sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
@@ -130,5 +115,20 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
         map.put("productId", productId);
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams productQueryParams){
+
+        if (productQueryParams.getProductCategory() != null){
+            sql = sql + " AND category = :productCategory";
+            map.put("productCategory", productQueryParams.getProductCategory().name());
+        }
+        if (productQueryParams.getSearch() != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + productQueryParams.getSearch() + "%");
+        }
+
+        return sql;
+
     }
 }
