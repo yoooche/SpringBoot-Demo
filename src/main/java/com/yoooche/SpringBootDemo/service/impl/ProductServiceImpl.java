@@ -1,5 +1,6 @@
 package com.yoooche.SpringBootDemo.service.impl;
 
+import com.yoooche.SpringBootDemo.constant.ProductCategory;
 import com.yoooche.SpringBootDemo.dao.ProductDao;
 import com.yoooche.SpringBootDemo.dto.ProductRequest;
 import com.yoooche.SpringBootDemo.model.Product;
@@ -16,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductCategory productCategory, String search) {
+        return productDao.getProducts(productCategory, search);
     }
 
     @Override

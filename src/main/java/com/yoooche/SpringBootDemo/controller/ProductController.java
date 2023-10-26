@@ -1,5 +1,6 @@
 package com.yoooche.SpringBootDemo.controller;
 
+import com.yoooche.SpringBootDemo.constant.ProductCategory;
 import com.yoooche.SpringBootDemo.dto.ProductRequest;
 import com.yoooche.SpringBootDemo.model.Product;
 import com.yoooche.SpringBootDemo.service.ProductService;
@@ -54,8 +55,12 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory productCategory,
+            @RequestParam(required = false) String search)
+    {
+
+        List<Product> productList = productService.getProducts(productCategory, search);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 }
