@@ -1,6 +1,7 @@
 package com.yoooche.SpringBootDemo.controller;
 
 import com.yoooche.SpringBootDemo.constant.ProductCategory;
+import com.yoooche.SpringBootDemo.dto.ProductQueryParams;
 import com.yoooche.SpringBootDemo.dto.ProductRequest;
 import com.yoooche.SpringBootDemo.model.Product;
 import com.yoooche.SpringBootDemo.service.ProductService;
@@ -59,8 +60,11 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory productCategory,
             @RequestParam(required = false) String search)
     {
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setProductCategory(productCategory);
+        productQueryParams.setSearch(search);
 
-        List<Product> productList = productService.getProducts(productCategory, search);
+        List<Product> productList = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 }

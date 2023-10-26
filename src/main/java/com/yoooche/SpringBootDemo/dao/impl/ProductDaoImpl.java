@@ -2,6 +2,7 @@ package com.yoooche.SpringBootDemo.dao.impl;
 
 import com.yoooche.SpringBootDemo.constant.ProductCategory;
 import com.yoooche.SpringBootDemo.dao.ProductDao;
+import com.yoooche.SpringBootDemo.dto.ProductQueryParams;
 import com.yoooche.SpringBootDemo.dto.ProductRequest;
 import com.yoooche.SpringBootDemo.model.Product;
 import com.yoooche.SpringBootDemo.rowmapper.ProductRowMapper;
@@ -24,17 +25,17 @@ public class ProductDaoImpl implements ProductDao {
 
 
     @Override
-    public List<Product> getProducts(ProductCategory productCategory, String search) {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql = "SELECT * FROM product WHERE 1=1";
         Map<String, Object> map = new HashMap<>();
 
-        if (productCategory != null){
+        if (productQueryParams.getProductCategory() != null){
             sql = sql + " AND category = :productCategory";
-            map.put("productCategory", productCategory.name());
+            map.put("productCategory", productQueryParams.getProductCategory().name());
         }
-        if (search != null){
+        if (productQueryParams.getSearch() != null){
             sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + search + "%");
+            map.put("search", "%" + productQueryParams.getSearch() + "%");
         }
         return namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
     }
