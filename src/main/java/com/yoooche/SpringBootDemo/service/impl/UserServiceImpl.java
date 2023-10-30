@@ -1,6 +1,7 @@
 package com.yoooche.SpringBootDemo.service.impl;
 
 import com.yoooche.SpringBootDemo.dao.UserDao;
+import com.yoooche.SpringBootDemo.dto.UserLoginRequest;
 import com.yoooche.SpringBootDemo.dto.UserRegisterRequest;
 import com.yoooche.SpringBootDemo.model.User;
 import com.yoooche.SpringBootDemo.service.UserService;
@@ -8,10 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.Access;
+import javax.validation.Valid;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -37,6 +43,21 @@ public class UserServiceImpl implements UserService {
         // email未被註冊 -> 創建帳號
         return userDao.createUser(userRegisterRequest);
 
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+        if(user == null){
+            log.warn("該 email {} 未被註冊", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if(user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }else {
+            log.warn("email {} 的密碼不正確", userLoginRequest.getPassword());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
