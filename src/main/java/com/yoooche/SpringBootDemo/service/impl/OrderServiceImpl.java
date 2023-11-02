@@ -4,6 +4,7 @@ import com.yoooche.SpringBootDemo.dao.OrderDao;
 import com.yoooche.SpringBootDemo.dao.ProductDao;
 import com.yoooche.SpringBootDemo.dto.BuyItem;
 import com.yoooche.SpringBootDemo.dto.CreateOrderRequest;
+import com.yoooche.SpringBootDemo.model.Order;
 import com.yoooche.SpringBootDemo.model.OrderItem;
 import com.yoooche.SpringBootDemo.model.Product;
 import com.yoooche.SpringBootDemo.service.OrderService;
@@ -20,6 +21,14 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+        List<OrderItem> orderList = orderDao.getOrderItemsByOrderId(orderId);
+        order.setOrderItemList(orderList);
+        return order;
+    }
 
     @Transactional
     @Override
