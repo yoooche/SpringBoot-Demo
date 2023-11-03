@@ -1,5 +1,6 @@
 package com.yoooche.SpringBootDemo.dao;
 
+import com.yoooche.SpringBootDemo.dto.OrderQueryParams;
 import com.yoooche.SpringBootDemo.model.Order;
 import com.yoooche.SpringBootDemo.model.OrderItem;
 
@@ -10,4 +11,6 @@ public interface OrderDao {
     List<OrderItem> getOrderItemsByOrderId(Integer orderId);
     Integer createOrder(Integer userId, Integer totalAmount);
     void createOrderItems(Integer orderId, List<OrderItem> orderItemList);
+    Integer count(OrderQueryParams orderQueryParams);
+    List<Order> getOrders(OrderQueryParams orderQueryParams);
 }
